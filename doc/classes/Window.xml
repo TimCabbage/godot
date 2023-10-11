@@ -834,6 +834,9 @@
 		<constant name="CONTENT_SCALE_ASPECT_EXPAND" value="4" enum="ContentScaleAspect">
 			The content's aspect will be preserved. If the target size has different aspect from the base one, the content will stay in the top-left corner and add an extra visible area in the stretched space.
 		</constant>
+		<constant name="CONTENT_SCALE_ASPECT_KEEP_INTEGER" value="5" enum="ContentScaleAspect">
+			The content's aspect will be preserved. If the target size has different aspect from the base one, the image will be centered and black bars will appear on left and right sides. It will also preserve integer scaling.
+		</constant>
 		<constant name="LAYOUT_DIRECTION_INHERITED" value="0" enum="LayoutDirection">
 			Automatic layout direction, determined from the parent window layout direction.
 		</constant>

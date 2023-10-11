@@ -1001,6 +1001,7 @@ void Window::_update_viewport_size() {
 		//actual screen video mode
 		Size2 video_mode = size;
 		Size2 desired_res = content_scale_size;
+		float final_content_scale_factor = content_scale_factor;
 
 		Size2 viewport_size;
 		Size2 screen_size;
@@ -1057,6 +1058,15 @@ void Window::_update_viewport_size() {
 			offset.y = Math::round(margin.y * viewport_size.x / screen_size.x);
 		}
 
+		if(content_scale_aspect == CONTENT_SCALE_ASPECT_KEEP_INTEGER) {
+			final_content_scale_factor = floorf(MAX(1, MIN(video_mode.x * content_scale_factor / content_scale_size.x, video_mode.y * content_scale_factor / content_scale_size.y)));
+			desired_res = content_scale_size / content_scale_factor * final_content_scale_factor;		
+			margin.x = Math::round((video_mode.x - desired_res.x) / 2.0);
+			margin.y = Math::round((video_mode.y - desired_res.y) / 2.0);
+			viewport_size = desired_res;
+			screen_size = desired_res;
+		}
+
 		switch (content_scale_mode) {
 			case CONTENT_SCALE_MODE_DISABLED: {
 				// Already handled above
@@ -1064,14 +1074,14 @@ void Window::_update_viewport_size() {
 			} break;
 			case CONTENT_SCALE_MODE_CANVAS_ITEMS: {
 				final_size = screen_size;
-				final_size_override = viewport_size / content_scale_factor;
+				final_size_override = viewport_size / final_content_scale_factor;
 				attach_to_screen_rect = Rect2(margin, screen_size);
-				font_oversampling = (screen_size.x / viewport_size.x) * content_scale_factor;
+				font_oversampling = (screen_size.x / viewport_size.x) * final_content_scale_factor;
 
 				window_transform.translate_local(margin);
 			} break;
 			case CONTENT_SCALE_MODE_VIEWPORT: {
-				final_size = (viewport_size / content_scale_factor).floor();
+				final_size = (viewport_size / final_content_scale_factor).floor();
 				attach_to_screen_rect = Rect2(margin, screen_size);
 
 				window_transform.translate_local(margin);
@@ -2738,6 +2748,7 @@ void Window::_bind_methods() {
 	BIND_ENUM_CONSTANT(CONTENT_SCALE_ASPECT_KEEP_WIDTH);
 	BIND_ENUM_CONSTANT(CONTENT_SCALE_ASPECT_KEEP_HEIGHT);
 	BIND_ENUM_CONSTANT(CONTENT_SCALE_ASPECT_EXPAND);
+	BIND_ENUM_CONSTANT(CONTENT_SCALE_ASPECT_KEEP_INTEGER);
 
 	BIND_ENUM_CONSTANT(LAYOUT_DIRECTION_INHERITED);
 	BIND_ENUM_CONSTANT(LAYOUT_DIRECTION_LOCALE);

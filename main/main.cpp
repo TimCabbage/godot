@@ -3111,6 +3111,8 @@ bool Main::start() {
 				cs_aspect = Window::CONTENT_SCALE_ASPECT_KEEP_WIDTH;
 			} else if (stretch_aspect == "keep_height") {
 				cs_aspect = Window::CONTENT_SCALE_ASPECT_KEEP_HEIGHT;
+			} else if (stretch_aspect == "keep_integer") {
+				cs_aspect = Window::CONTENT_SCALE_ASPECT_KEEP_INTEGER;
 			} else if (stretch_aspect == "expand") {
 				cs_aspect = Window::CONTENT_SCALE_ASPECT_EXPAND;
 			}
